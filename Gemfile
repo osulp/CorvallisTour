@@ -3,8 +3,6 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0'
 
-gem 'rspec-rails'
-
 gem 'mysql2'
 
 # Use SCSS for stylesheets
@@ -44,6 +42,10 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-gem 'pry', group: [:development, :test]
-gem 'georuby'
-
+group :development, :test do
+  gem 'pry-rails'
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'factory_girl'
+  gem 'factory_girl_rails'
+end
