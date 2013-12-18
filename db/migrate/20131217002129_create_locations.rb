@@ -4,6 +4,7 @@ class CreateLocations < ActiveRecord::Migration
       t.string :name, :null => false
       t.float :latitude, :null => false
       t.float :longitude, :null => false
+      t.float :radius, :null => false
 
       t.timestamps
     end
