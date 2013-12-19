@@ -49,6 +49,10 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'factory_girl'
   gem 'factory_girl_rails'
+  gem 'database_cleaner'
+  gem 'capybara'
+  gem 'poltergeist'
+  gem 'capybara-screenshot'
 end
 
 gem 'simple_form'
