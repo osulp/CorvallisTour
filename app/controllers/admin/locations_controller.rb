@@ -1,4 +1,4 @@
-class LocationsController < ApplicationController
+class Admin::LocationsController < AdminController
   respond_to :html
 
   def index

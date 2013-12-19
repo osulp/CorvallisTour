@@ -1,3 +1,5 @@
 CorvallisTour::Application.routes.draw do
-  resources :locations, :except => :show
+  scope module: 'admin' do
+    resources :locations, :except => :show
+  end
 end
