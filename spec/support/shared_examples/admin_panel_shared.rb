@@ -1,5 +1,3 @@
-include AuthHelper
-
 shared_examples 'admin_panel' do
   context 'when user is not logged in' do
     it "should be unauthorized" do
