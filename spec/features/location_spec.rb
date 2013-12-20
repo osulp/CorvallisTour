@@ -1,7 +1,11 @@
 require 'spec_helper'
+include AuthHelper
 
 describe 'location admin' do
   let(:location) {create(:location)}
+  before(:each) do
+    capybara_login
+  end
   context 'when there are locations defined' do
     before(:each) do
       location

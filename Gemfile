@@ -51,7 +51,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'database_cleaner'
   gem 'capybara'
-  gem 'poltergeist'
+  gem 'poltergeist', '~> 1.5.0'
   gem 'capybara-screenshot'
 end
 

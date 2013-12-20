@@ -1,2 +1,5 @@
 google_maps:
   api_key: your_google_api_key
+authentication:
+  username: admin
+  password: ea909ccfbf42c1d230f26167db4d4fdb # `secretadmin'
