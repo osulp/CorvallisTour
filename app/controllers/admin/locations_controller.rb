@@ -7,7 +7,7 @@ class Admin::LocationsController < AdminController
   end
 
   def new
-    @location = Location.new
+    @location = Location.new(APP_CONFIG['default_location'])
     respond_with @location
   end
 

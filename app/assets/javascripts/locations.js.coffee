@@ -19,18 +19,17 @@ class locationManager
     @form_lng.on('change', this.changedPoint)
     @form_radius.on('change', this.changedRadius)
 
-  # Default to the valley library
   getPoint: ->
     point = new google.maps.LatLng(this.getLatitude(), this.getLongitude())
   getLatitude: ->
     val = parseFloat(@form_lat.val())
-    if isNaN(val) then 44.5652 else val
+    if isNaN(val) then @last_latitude else @last_latitude = val
   getLongitude: ->
     val = parseFloat(@form_lng.val())
-    if isNaN(val) then -123.2759 else val
+    if isNaN(val) then @last_longitude else @last_longitude = val
   getRadius: ->
     val = parseFloat(@form_radius.val())
-    if isNaN(val) then 100.0 else val
+    if isNaN(val) then @last_radius else @last_radius = val
 
   # Update point into textbox
   setPoint: =>
