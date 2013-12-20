@@ -1,0 +1,19 @@
+<%= simple_form_for(@location) do |f| %>
+  <%= f.input :name %>
+  <div class="row">
+    <div class="col-xs-4"><%= f.input :latitude, :input_html => {:step => 0.01} %></div>
+    <div class="col-xs-4"><%= f.input :longitude, :input_html => {:step => 0.02} %></div>
+    <div class="col-xs-4"><%= f.input :radius, :input_html => {:step => 10} %></div>
+  </div>
+
+  <div id="map-canvas"></div>
+
+  <div class="control-group">
+    <div class="controls">
+      <%= f.button :submit, 'Save', :class => 'btn-primary' %>
+      <%= link_to 'Back', locations_path, :class => 'btn btn-default' %>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<%= APP_CONFIG['google_maps']['api_key'] %>&amp;sensor=true&amp;callback=initialize_map"></script>

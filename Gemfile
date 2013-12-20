@@ -7,6 +7,7 @@ gem 'mysql2'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
+gem 'bootstrap-sass', '~> 3.0.3.0'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -48,4 +49,10 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'factory_girl'
   gem 'factory_girl_rails'
+  gem 'database_cleaner'
+  gem 'capybara'
+  gem 'poltergeist', '~> 1.5.0'
+  gem 'capybara-screenshot'
 end
+
+gem 'simple_form'

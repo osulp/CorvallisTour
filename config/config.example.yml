@@ -1,0 +1,9 @@
+google_maps:
+  api_key: your_google_api_key
+default_location:
+  latitude: 44.5652
+  longitude: -123.2759
+  radius: 100.0
+authentication:
+  username: admin
+  password: ea909ccfbf42c1d230f26167db4d4fdb # `secretadmin'

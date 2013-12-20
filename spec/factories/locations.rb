@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :location do
-    name "Raser Stadium"
+    sequence(:name) { |n| "Reser Stadium #{n}" }
     latitude 44.56
     longitude -123.28
     radius 200.0

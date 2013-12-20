@@ -26,3 +26,6 @@ module CorvallisTour
     # config.i18n.default_locale = :de
   end
 end
+
+require 'yaml'
+APP_CONFIG = YAML.load(File.read(File.expand_path('../config.yml', __FILE__)))
