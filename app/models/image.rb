@@ -1,4 +1,5 @@
 class Image < ActiveRecord::Base
-  validates :path, :presence => true
   belongs_to :location
+  mount_uploader :photo, ImageUploader
+  validates_presence_of :photo
 end

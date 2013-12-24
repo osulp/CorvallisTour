@@ -15,7 +15,7 @@
       <td>
       <%= image_tag "https://maps.googleapis.com/maps/api/staticmap?markers=#{location.latitude},#{location.longitude}&size=160x120&sensor=false" %>
       <% location.images.each do |image| %>
-        <%= image_tag image.path, :class => 'location-image' %>
+        <%= image_tag image.photo, :class => 'location-image' %>
       <% end %>
       </td>
     </tr>

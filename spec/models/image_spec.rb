@@ -4,6 +4,8 @@ describe Image do
   subject {build(:image)}
   describe "validations" do
     it {should belong_to(:location)}
-    it {should validate_presence_of(:path)}
+    it 'should validate presence of :photo' do
+      expect(Image.new).to have(1).error_on(:photo)
+    end
   end
 end
