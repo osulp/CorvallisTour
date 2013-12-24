@@ -3,13 +3,13 @@ include AuthHelper
 
 describe 'location image admin' do
   let(:location) {create(:location)}
-  let(:image) {create(:image)}
   before(:each) do
     capybara_login
-    image
   end
   context 'when there are images defined' do
+    let(:image) {create(:image)}
     before(:each) do
+      image
       visit location_images_path image.location
     end
     it 'should show them' do
@@ -44,5 +44,6 @@ describe 'location image admin' do
     last = location.images.last
     expect(last.title).to eq 'Rings'
     expect(last.description).to eq 'Many rings in the picture'
+    expect(last.photo).not_to be_nil
   end
 end
