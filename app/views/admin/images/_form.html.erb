@@ -1,0 +1,18 @@
+<%= simple_form_for([@location, @image], :html => {:multipart => true}) do |f| %>
+  <%= f.input :title %>
+  <%= f.input :description %>
+
+  <div class="form-group">
+  <% if action_name == 'new' %>
+    <%= f.label :photo, 'Photo' %>
+    <%= f.file_field :photo %>
+  <% else %>
+    <%= image_tag @image.photo %>
+  <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= f.button :submit, 'Save', :class => 'btn-primary' %>
+    <%= link_to 'Back', location_images_path(@location), :class => 'btn btn-default' %>
+  </div>
+<% end %>

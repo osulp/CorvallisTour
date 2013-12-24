@@ -44,7 +44,7 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 group :development, :test do
-  gem 'pry-rails'
+  gem 'jazz_hands'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'factory_girl'
@@ -56,3 +56,5 @@ group :development, :test do
 end
 
 gem 'simple_form'
+gem 'carrierwave'
+gem 'mini_magick'

@@ -7,3 +7,6 @@ default_location:
 authentication:
   username: admin
   password: ea909ccfbf42c1d230f26167db4d4fdb # `secretadmin'
+resize_image:
+  photo: [480, 360]
+  thumbnail: [120, 90]

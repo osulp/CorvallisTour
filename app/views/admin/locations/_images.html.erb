@@ -1,0 +1,6 @@
+      <% location.images[0,3].each do |image| %>
+        <%= image_tag image.photo.thumb, :class => 'location-image' %>
+      <% end %>
+      <% if location.images.length > 3 %>
+        <span class="label label-default">More...</span>
+      <% end %>
