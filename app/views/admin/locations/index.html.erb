@@ -17,7 +17,7 @@
         <%= link_to 'Manage images', location_images_path(location), :class => 'btn btn-default' %>
       </td>
       <td>
-      <%= image_tag "https://maps.googleapis.com/maps/api/staticmap?markers=#{location.latitude},#{location.longitude}&size=160x120&sensor=false" %>
+      <%= image_tag "https://maps.googleapis.com/maps/api/staticmap?markers=#{location.latitude},#{location.longitude}&size=160x120&zoom=14&sensor=false" %>
       <%= render 'images', :location => location %>
       </td>
     </tr>
