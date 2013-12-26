@@ -36,3 +36,6 @@ config/god.conf
 
 # Ignore pids
 pids
+
+# Ignore uploaded files
+public/uploads/*

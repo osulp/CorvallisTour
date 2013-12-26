@@ -2,7 +2,8 @@
 
 <table class="table">
   <tr>
-    <th class="col-xs-4" colspan="2">Name</th>
+    <th class="col-xs-2">Name</th>
+    <th class="col-xs-2"></th>
     <th class="col-xs-8">Images</th>
   </tr>
   <% @locations.each do |location| %>
@@ -11,12 +12,13 @@
       <td>
         <%= link_to 'Edit', edit_location_path(location), :class => 'btn btn-default' %>
         <%= link_to 'Delete', location_path(location), :data => {:confirm => 'Are you sure?'}, :method => :delete, :class => 'btn btn-danger' %>
+        <br />
+        <br />
+        <%= link_to 'Manage images', location_images_path(location), :class => 'btn btn-default' %>
       </td>
       <td>
       <%= image_tag "https://maps.googleapis.com/maps/api/staticmap?markers=#{location.latitude},#{location.longitude}&size=160x120&sensor=false" %>
-      <% location.images.each do |image| %>
-        <%= image_tag image.path, :class => 'location-image' %>
-      <% end %>
+      <%= render 'images', :location => location %>
       </td>
     </tr>
   <% end %>

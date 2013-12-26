@@ -1,0 +1,25 @@
+<h1>Images</h1>
+
+<table class="table">
+  <tr>
+    <th class="col-xs-2">Images</th>
+    <th class="col-xs-2"></th>
+    <th class="col-xs-8">Description</th>
+  </tr>
+  <% @images.each do |image| %>
+    <tr>
+      <td><%= image_tag image.photo.thumb, :class => 'image-image' %></td>
+      <td>
+        <%= link_to 'Edit', edit_location_image_path(@location, image), :class => 'btn btn-default' %><br /><br />
+        <%= link_to 'Delete', location_image_path(@location, image), :data => {:confirm => 'Are you sure?'}, :method => :delete, :class => 'btn btn-danger' %>
+      </td>
+      <td>
+        <b><%= image.title %></b><br />
+        <%= image.description %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<%= link_to 'New image', new_location_image_path(@location), :class => 'btn btn-primary' %>
+<%= link_to 'Back', locations_path, :class => 'btn btn-default' %>

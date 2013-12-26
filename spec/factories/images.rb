@@ -1,6 +1,8 @@
 FactoryGirl.define do
   factory :image do
-    title "Raser Stadium"
-    path "raser-statium-123456.jpg"
+    location
+    title "Reser Stadium"
+    description "This looks cool"
+    photo Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, '/spec/fixtures/sample_image.png')))
   end
 end
