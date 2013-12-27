@@ -6,21 +6,23 @@ services:
 - mysql
 env:
   matrix:
-  - CTOUR_ADAPTER=mysql2 CTOUR_DB_PREFIX=corvallistour CTOUR_DB_USERNAME=travis
-    CTOUR_DB_HOST=127.0.0.1
+  - CTOUR_ADAPTER=mysql2 CTOUR_DB_PREFIX=corvallistour CTOUR_DB_USERNAME=travis CTOUR_DB_HOST=127.0.0.1
   global:
-    # - BUNDLE_ARCHIVE="CorvallisTour"
+    - BUNDLE_ARCHIVE="CorvallisTour"
     # - AWS_S3_BUCKET="CI-Artifacts"
     # - secure: kKORhtQCNWogqIsM6y20CcfQRFuB75PfIOA9geixEWOBDjhbJv2SGTKjbhOZW0BvP4j5FHY3lNQ+gOkmNUUBdlvImQWW+qqUOWswKlLs5KHHq1yUTg8WqnJzrex0fbPtUSgCr4jCsoyBPHCCvPleA6/1WLe79RU3TUXfzY0q9xU=
+    - secure: "BOvwb3PtxQ+MZ0YHuGohiG20hPI4du1OqQUlCXoaOHHZehESlvMOgZBm6pTXBK8+0eIbY8onsPZXuy2PE4JBUC7EBUfk6mMyqS7g1DSKzeZMPT2LZTCFlrVOXh9VI3AlnbFGlvBp6UktM7PhMYdkcljBEjXEbAfS5H/Rtu0/XZU="
 before_install:
   - "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
   # - gem install bundle_cache -v 0.1.0
   # - bundle_cache_install
+  - ./script/bundle_install.sh
 before_script:
   - mysql -e 'create database corvallistour_test;'
   - cp config/config.example.yml config/config.yml
 after_script:
   # - bundle_cache
+  - ruby script/bundle_cache.rb
 script:
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - bundle exec rake db:test:prepare
