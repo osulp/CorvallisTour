@@ -53,6 +53,8 @@ group :development, :test do
   gem 'capybara'
   gem 'poltergeist', '~> 1.5.0'
   gem 'capybara-screenshot'
+  gem 'simplecov', :require => false
+  gem 'coveralls', require: false
 end
 
 gem 'simple_form'
