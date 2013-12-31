@@ -12,14 +12,4 @@ class WaypointsController < ApplicationController
 
     respond_with waypoints
   end
-
-  def images
-    location = Location.find(params[:id])
-    images = Image.where(:location => location)
-    session[:visited] ||= []
-    session[:visited] <<= location.id
-    respond_with images
-  rescue ActiveRecord::RecordNotFound
-    respond_with []
-  end
 end
