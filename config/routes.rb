@@ -1,6 +1,6 @@
 CorvallisTour::Application.routes.draw do
   root "home#index"
-  scope module: 'admin' do
+  namespace :admin do
     resources :locations, :except => :show do
       resources :images
     end

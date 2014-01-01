@@ -19,19 +19,19 @@ class Admin::LocationsController < AdminController
   def create
     @location = Location.new(location_params)
     flash[:success] = 'Location added' if @location.save
-    respond_with @location, :location => locations_path
+    respond_with @location, :location => admin_locations_path
   end
 
   def update
     @location = Location.find(params[:id])
     flash[:success] = 'Location updated' if @location.update(location_params)
-    respond_with @location, :location => locations_path
+    respond_with @location, :location => admin_locations_path
   end
 
   def destroy
     @location = Location.find(params[:id])
     flash[:success] = 'Location deleted' if @location.destroy
-    respond_with @location, :location => locations_path
+    respond_with @location, :location => admin_locations_path
   end
 
   private

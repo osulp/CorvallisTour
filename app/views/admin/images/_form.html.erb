@@ -1,4 +1,4 @@
-<%= simple_form_for([@location, @image], :html => {:multipart => true}) do |f| %>
+<%= simple_form_for([:admin, @location, @image], :html => {:multipart => true}) do |f| %>
   <%= f.input :title %>
   <%= f.input :description %>
 
@@ -13,6 +13,6 @@
 
   <div class="form-group">
     <%= f.button :submit, 'Save', :class => 'btn-primary' %>
-    <%= link_to 'Back', location_images_path(@location), :class => 'btn btn-default' %>
+    <%= link_to 'Back', admin_location_images_path(@location), :class => 'btn btn-default' %>
   </div>
 <% end %>

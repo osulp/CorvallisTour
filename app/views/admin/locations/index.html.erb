@@ -10,11 +10,11 @@
     <tr>
       <td><%= location.name %></td>
       <td>
-        <%= link_to 'Edit', edit_location_path(location), :class => 'btn btn-default' %>
-        <%= link_to 'Delete', location_path(location), :data => {:confirm => 'Are you sure?'}, :method => :delete, :class => 'btn btn-danger' %>
+        <%= link_to 'Edit', edit_admin_location_path(location), :class => 'btn btn-default' %>
+        <%= link_to 'Delete', admin_location_path(location), :data => {:confirm => 'Are you sure?'}, :method => :delete, :class => 'btn btn-danger' %>
         <br />
         <br />
-        <%= link_to 'Manage images', location_images_path(location), :class => 'btn btn-default' %>
+        <%= link_to 'Manage images', admin_location_images_path(location), :class => 'btn btn-default' %>
       </td>
       <td>
       <%= image_tag "https://maps.googleapis.com/maps/api/staticmap?markers=#{location.latitude},#{location.longitude}&size=160x120&zoom=14&sensor=false" %>
@@ -24,4 +24,4 @@
   <% end %>
 </table>
 
-<%= link_to 'New location', new_location_path, :class => 'btn btn-primary' %>
+<%= link_to 'New location', new_admin_location_path, :class => 'btn btn-primary' %>

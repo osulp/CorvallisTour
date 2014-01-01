@@ -20,19 +20,19 @@ class Admin::ImagesController < AdminController
   def create
     @image = @location.images.new(image_params)
     flash[:success] = 'Image added' if @image.save
-    respond_with @image, :location => location_images_path(@location)
+    respond_with @image, :location => admin_location_images_path(@location)
   end
 
   def update
     @image = @location.images.find(params[:id])
     flash[:success] = 'Image updated' if @image.update(image_params)
-    respond_with @image, :location => location_images_path(@location)
+    respond_with @image, :location => admin_location_images_path(@location)
   end
 
   def destroy
     @image = @location.images.find(params[:id])
     flash[:success] = 'Image deleted' if @image.destroy
-    respond_with @image, :location => location_images_path(@location)
+    respond_with @image, :location => admin_location_images_path(@location)
   end
 
   private
