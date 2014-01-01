@@ -31,5 +31,11 @@ describe 'API calls' do
       json = JSON.parse(response.body)
       expect(json[0]['visited']).to eq(true)
     end
+    context 'when invalid location id given' do
+      it 'should return empty array' do
+        get '/locations/-1/images'
+        expect(response.body).to eq('[]')
+      end
+    end
   end
 end
