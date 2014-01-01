@@ -9,7 +9,7 @@ describe 'location admin' do
   context 'when there are locations defined' do
     before(:each) do
       location
-      visit locations_path
+      visit admin_locations_path
     end
     it 'should show them' do
       expect(page).to have_content(location.name)
@@ -31,13 +31,13 @@ describe 'location admin' do
     end
     it 'should let you delete', :js => true do
       expect(page).to have_content(location.name)
-      find("a[href='/locations/#{location.id}'][data-method='delete']").click
+      find("a[href='/admin/locations/#{location.id}'][data-method='delete']").click
       expect(page).not_to have_content(location.name)
       expect(page).to have_content("Location deleted")
     end
   end
   it 'should let you create' do
-    visit locations_path
+    visit admin_locations_path
     click_link 'New location'
     fill_in 'location_name', :with => 'Another random place'
     fill_in 'location_latitude', :with => '24.01'

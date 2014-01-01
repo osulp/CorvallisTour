@@ -10,7 +10,7 @@ describe 'location image admin' do
     let(:image) {create(:image)}
     before(:each) do
       image
-      visit location_images_path image.location
+      visit admin_location_images_path image.location
     end
     it 'should show them' do
       expect(page).to have_content(image.title)
@@ -28,13 +28,13 @@ describe 'location image admin' do
     end
     it 'should let you delete', :js => true do
       expect(page).to have_content(image.title)
-      find("a[href='/locations/#{image.location.id}/images/#{image.id}'][data-method='delete']").click
+      find("a[href='/admin/locations/#{image.location.id}/images/#{image.id}'][data-method='delete']").click
       expect(page).not_to have_content(image.title)
       expect(page).to have_content("Image deleted")
     end
   end
   it 'should let you create' do
-    visit location_images_path location
+    visit admin_location_images_path location
     click_link 'New image'
     fill_in 'image_title', :with => 'Rings'
     fill_in 'image_description', :with => 'Many rings in the picture'

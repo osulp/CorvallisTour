@@ -1,4 +1,4 @@
-<%= simple_form_for(@location) do |f| %>
+<%= simple_form_for([:admin, @location]) do |f| %>
   <%= f.input :name %>
   <div class="row">
     <div class="col-xs-4"><%= f.input :latitude, :input_html => {:step => 0.01} %></div>
@@ -10,7 +10,7 @@
 
   <div class="form-group">
     <%= f.button :submit, 'Save', :class => 'btn-primary' %>
-    <%= link_to 'Back', locations_path, :class => 'btn btn-default' %>
+    <%= link_to 'Back', admin_locations_path, :class => 'btn btn-default' %>
   </div>
 <% end %>
 
