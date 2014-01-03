@@ -13,3 +13,34 @@
 .ui-header h1.ui-title {
   margin: 0;
 }
+
+#popup-images {
+  p {
+    text-align: left;
+    overflow-y: auto;
+  }
+}
+@media screen and (orientation:portrait) {
+  #popup-images {
+    text-align: center;
+    img {
+      max-height: 60%;
+    }
+    p {
+      max-height: 36%;
+    }
+  }
+}
+
+@media screen and (orientation:landscape) {
+  #popup-images {
+    img {
+      float: left;
+      max-width: 50%;
+      padding: 6px;
+    }
+    p {
+      height: 95%;
+    }
+  }
+}
