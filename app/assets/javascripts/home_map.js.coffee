@@ -37,6 +37,8 @@ class mapManager
     @directionsService = new google.maps.DirectionsService()
     @directionsDisplay.setMap(@map);
 
+    $('#my-location-button').click(this.findMyLocatioin)
+
     this.getLocations()
 
   updatePosition: (position) =>
@@ -98,3 +100,6 @@ class mapManager
 
   deg2rad: (deg) ->
     deg * (Math.PI / 180)
+
+  findMyLocatioin: =>
+    @map.panTo(@user_location)

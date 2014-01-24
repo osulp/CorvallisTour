@@ -44,3 +44,11 @@
     }
   }
 }
+
+.ui-icon-gpsloc {
+  margin-right: 34px!important;
+}
+.ui-icon-gpsloc:after {
+    background-image: url("/assets/gpsloc.png");
+    background-size: 17px 17px;
+}
