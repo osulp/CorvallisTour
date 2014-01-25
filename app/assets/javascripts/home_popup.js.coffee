@@ -3,20 +3,46 @@ jQuery ->
 
 class popupManager
   constructor: ->
+    $('#images-button').hide()
+    $('#images-button').click(this.display)
+
     $('#popup-images').on({
       popupbeforeposition: ->
         h = ($(window).height() - 40);
         w = ($(window).width() - 40);
         $('#popup-images').css('height', h + 'px');
         $('#popup-images').css('width', w + 'px');
-      swipeleft: =>
-        this.next()
-      swiperight: =>
-        this.prev()
     })
-  display: (data) ->
-    @images = data
-    @image_index = 0
+    $('body').on({
+      swipeleft: =>
+        this.next() if $('#popup-images-screen').hasClass('in')
+      swiperight: =>
+        this.prev() if $('#popup-images-screen').hasClass('in')
+    })
+
+    @cached_images = {}
+
+  approaching: (location_id, visited) ->
+    if @cached_images[location_id]
+      this.approaching_after(location_id, visited)
+    else
+      $.getJSON("/locations/#{location_id}/images", (data) =>
+        @cached_images[location_id] = data
+        this.approaching_after(location_id, visited)
+      )
+  approaching_after: (location_id, visited) ->
+    unless @images == @cached_images[location_id]
+      @images = @cached_images[location_id]
+      @image_index = 0
+    unless visited
+      this.display()
+
+    $('#images-button').show()
+
+  leaving: ->
+    $('#images-button').hide()
+
+  display: =>
     this.setImage()
     $('#popup-images').popup('open')
   prev: ->

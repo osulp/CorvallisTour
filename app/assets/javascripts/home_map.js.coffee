@@ -49,16 +49,17 @@ class mapManager
     if(!@locations)
       return
     # See if user is approaching a place
-    approaching = @locations.filter((l) -> l.visited == false)
-                            .filter(((l) -> this.distance(position, l) <= l.radius), this)
+    approaching = @locations.filter(((l) -> this.distance(position, l) <= l.radius), this)
 
-    if(approaching[0])
-      approaching[0].visited = true
-      $.getJSON("/locations/#{approaching[0].id}/images", (data) =>
-        if(data.length > 0)
-          window.popupManager.display(data)
-      )
-      this.getGoogleDirections()
+    if approaching[0]
+      @in_location = true
+      window.popupManager.approaching(approaching[0].id, approaching[0].visited)
+      unless approaching[0].visited
+        approaching[0].visited = true
+        this.getGoogleDirections()
+    else if @in_location
+      @in_location = false
+      window.popupManager.leaving()
   errorHandler: (err) ->
     if(err.code == 1)
       alert("Error: Access is denied!");
