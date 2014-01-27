@@ -19,18 +19,20 @@ class popupManager
       swiperight: =>
         this.prev() if $('#popup-images-screen').hasClass('in')
     })
+    $(window).on('approaching', this.approaching)
+    $(window).on('leaving', this.leaving)
 
     @cached_images = {}
 
-  approaching: (location_id, visited) ->
+  approaching: (event, location_id, visited) =>
     if @cached_images[location_id]
-      this.approaching_after(location_id, visited)
+      this.loadImages(location_id, visited)
     else
       $.getJSON("/locations/#{location_id}/images", (data) =>
         @cached_images[location_id] = data
-        this.approaching_after(location_id, visited)
+        this.loadImages(location_id, visited)
       )
-  approaching_after: (location_id, visited) ->
+  loadImages: (location_id, visited) ->
     unless @images == @cached_images[location_id]
       @images = @cached_images[location_id]
       @image_index = 0
