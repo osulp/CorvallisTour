@@ -20,6 +20,18 @@ class mapManager
       $.cookie('origin_location', [position.coords.latitude, position.coords.longitude], { expires: 1 })
       @origin_location = @user_location
 
+    this.createMap()
+
+    @directionsDisplay = new google.maps.DirectionsRenderer()
+    @directionsService = new google.maps.DirectionsService()
+    @directionsDisplay.setMap(@map);
+
+    $('#my-location-button').click(this.findMyLocatioin)
+
+    this.getLocations()
+
+
+  createMap: ->
     map_options = {center: @user_location, zoom: 14}
     @map = new google.maps.Map($('#map-canvas')[0], map_options)
     @gps_icon = {
@@ -30,35 +42,34 @@ class mapManager
       anchor: new google.maps.Point(8, 8)
     }
     @marker = new google.maps.Marker({position: @user_location, map: @map, title: 'Current', icon: @gps_icon})
-    options = {enableHighAccuracy: true, maximumAge: 5000, timeout: 5000, frequency: 5000}
-    @watchID = navigator.geolocation.watchPosition(this.updatePosition, this.errorHandler, options)
+    watcher_options = {enableHighAccuracy: true, maximumAge: 5000, timeout: 5000, frequency: 5000}
+    @watchID = navigator.geolocation.watchPosition(this.updatePosition, this.errorHandler, watcher_options)
 
-    @directionsDisplay = new google.maps.DirectionsRenderer()
-    @directionsService = new google.maps.DirectionsService()
-    @directionsDisplay.setMap(@map);
-
-    $('#my-location-button').click(this.findMyLocatioin)
-
-    this.getLocations()
 
   updatePosition: (position) =>
     new_location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
     @marker.setPosition(new_location)
     @user_location = new_location
 
-    if(!@locations)
+    if(!@locations?)
       return
     # See if user is approaching a place
-    approaching = @locations.filter((l) -> l.visited == false)
-                            .filter(((l) -> this.distance(position, l) <= l.radius), this)
+    nearby = this.nearbyLocations(position)
 
-    if(approaching[0])
-      approaching[0].visited = true
-      $.getJSON("/locations/#{approaching[0].id}/images", (data) =>
-        if(data.length > 0)
-          window.popupManager.display(data)
-      )
-      this.getGoogleDirections()
+    if nearby?
+      @in_location = true
+      $(window).trigger 'approaching', [nearby.id, nearby.visited]
+      unless nearby.visited
+        nearby.visited = true
+        this.getGoogleDirections()
+    else if @in_location
+      @in_location = false
+      $(window).trigger 'leaving'
+
+  nearbyLocations: (position) ->
+    nearby = @locations.filter(((l) -> this.distance(position, l) <= l.radius), this)
+    if nearby.length == 1 then nearby[0] else null
+
   errorHandler: (err) ->
     if(err.code == 1)
       alert("Error: Access is denied!");
