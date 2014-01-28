@@ -79,6 +79,7 @@ class mapManager
   getLocations: ->
     $.getJSON('/locations', (data) =>
       @locations = data
+      window.locationsManager.saveLocations(data) if window.locationsManager?
       this.getGoogleDirections()
     )
 
