@@ -13,7 +13,7 @@
     <div data-role="header">
         <a href="#" id="images-button" class="ui-btn ui-icon-camera ui-btn-icon-notext ui-corner-all ui-btn-left">Images</a>
         <a href="#" id="my-location-button" class="ui-btn ui-icon-gpsloc ui-btn-icon-notext ui-corner-all ui-btn-right">My Location</a>
-        <a href="#" class="ui-btn ui-icon-bullets ui-btn-icon-notext ui-corner-all ui-btn-right">History</a>
+        <a href="#" id="locations-button" class="ui-btn ui-icon-bullets ui-btn-icon-notext ui-corner-all ui-btn-right">History</a>
       <h1 id="header-text">Corvallis Tour</h1>
     </div>
     <div data-role="content" id="content">
@@ -23,6 +23,11 @@
       <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
       <img src="#" alt="Image" />
       <p><b></b><br /><br /><span></span></p>
+    </div>
+    <div data-role="popup" id="popup-locations">
+      <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+      <ul id="locations-content" data-role="listview" data-inset="true">
+      </ul>
     </div>
   </div>
   <%= javascript_include_tag "home" %>
