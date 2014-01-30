@@ -61,3 +61,5 @@ end
 gem 'simple_form'
 gem 'carrierwave'
 gem 'mini_magick'
+
+gem "sprockets-digest-assets-fix", :github => "tobiasr/sprockets-digest-assets-fix"
