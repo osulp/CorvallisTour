@@ -1,10 +1,30 @@
+before_request_gps = 0
+
 window.initialize_map = ->
   if (navigator.geolocation)
+    before_request_gps = +new Date()
     navigator.geolocation.getCurrentPosition((position) -> 
       window.mapManager = new mapManager(position)
-    )
+    , get_position_error)
   else
-    alert("Geolocation is not supported by this browser.")
+    $('#map-canvas').html("Geolocation is not supported by this browser.")
+
+get_position_error = (error) ->
+  switch error.code
+    when error.PERMISSION_DENIED
+      $('#map-canvas').html("<br /><br />Location service must be allowed in order to use this application.")
+      after_request_gps = +new Date()
+       # Assume human finger will not touch the "disallow" button in 500ms
+      if after_request_gps - before_request_gps < 500
+        # Then this must because user disallowed location service inside their privacy settings
+        if (navigator.platform.indexOf("iPhone") != -1) || (navigator.platform.indexOf("iPod") != -1)
+          $('#map-canvas').html("<br /><br />Location service seems to be disabled.<br /><br />To enable location service, navigate to<br /><b>Settings</b> &gt; <b>Privacy</b> &gt; <b>Location Services</b><br />and enable it for safari.")
+        else
+          $('#map-canvas').html("<br /><br />Location service seems to be disabled.<br /><br />You must enable it in your device settings in order to use this application.")
+    when error.POSITION_UNAVAILABLE then $('#map-canvas').html("Location information is unavailable.")
+    when error.TIMEOUT then $('#map-canvas').html("The request to get user location timed out.")
+    when error.UNKNOWN_ERROR then $('#map-canvas').html("An unknown error occurred.")
+
 
 class mapManager
   constructor: (position) ->
