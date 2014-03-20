@@ -42,14 +42,15 @@ class mapManager
 
     this.createMap()
 
-    @directionsDisplay = new google.maps.DirectionsRenderer()
+    @directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true})
     @directionsService = new google.maps.DirectionsService()
     @directionsDisplay.setMap(@map);
 
-    $('#my-location-button').click(this.findMyLocatioin)
+    $('#my-location-button').click(this.findMyLocation)
 
     this.getLocations()
 
+    @markers_on_map = []
 
   createMap: ->
     map_options = {center: @user_location, zoom: 14}
@@ -64,7 +65,6 @@ class mapManager
     @marker = new google.maps.Marker({position: @user_location, map: @map, title: 'Current', icon: @gps_icon})
     watcher_options = {enableHighAccuracy: true, maximumAge: 5000, timeout: 5000, frequency: 5000}
     @watchID = navigator.geolocation.watchPosition(this.updatePosition, this.errorHandler, watcher_options)
-
 
   updatePosition: (position) =>
     new_location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
@@ -81,7 +81,7 @@ class mapManager
       $(window).trigger 'approaching', [nearby.id, nearby.visited]
       unless nearby.visited
         nearby.visited = true
-        this.getGoogleDirections()
+        this.drawMarkers()
     else if @in_location
       @in_location = false
       $(window).trigger 'leaving'
@@ -118,6 +118,9 @@ class mapManager
     @directionsService.route(request, (result, status) =>
       if (status == google.maps.DirectionsStatus.OK)
         @directionsDisplay.setDirections(result);
+        @route = result.routes[0]
+        this.drawArrows()
+        this.drawMarkers()
     )
 
   distance: (position, location)->
@@ -133,5 +136,62 @@ class mapManager
   deg2rad: (deg) ->
     deg * (Math.PI / 180)
 
-  findMyLocatioin: =>
+  findMyLocation: =>
     @map.panTo(@user_location)
+
+  drawMarkers: () ->
+    # clean old markers
+    for marker in @markers_on_map
+      marker.setMap(null)
+    @markers_on_map.length = 0
+
+    # draw visited sites
+    visited = @locations.filter((l) -> l.visited)
+    for site in visited
+      @markers_on_map.push(new google.maps.Marker({
+        position: new google.maps.LatLng(site.latitude, site.longitude)
+        icon: '/assets/site-visited.png'
+        map: @map
+      }))
+
+    # draw sites to visit
+    to_visit = @locations.filter((l) -> l.visited == false)
+    for site in to_visit
+      @markers_on_map.push(new google.maps.Marker({
+        position: new google.maps.LatLng(site.latitude, site.longitude)
+        icon: '/assets/site-tovisit.png'
+        map: @map
+      }))
+
+    # draw home
+    @markers_on_map.push(new google.maps.Marker({
+      position: @origin_location
+      icon: '/assets/home.png'
+      map: @map
+    }))
+  drawArrows: () ->
+    for leg in @route.legs
+      for step in leg.steps
+        p = if step.lat_lngs.length then Math.floor(step.lat_lngs.length / 2) else 0
+        if p >= step.lat_lngs.length then p = 0
+        a = if step.lat_lngs[p]? then step.lat_lngs[p] else step.start_point
+        z = if step.lat_lngs[p+1]? then step.lat_lngs[p+1] else step.end_point
+        dir=((Math.atan2(z.lng()-a.lng(),z.lat()-a.lat())*180)/Math.PI)+360
+        ico=((dir-(dir%3))%120)
+        icon = {
+          url: 'http://maps.google.com/mapfiles/dir_'+ico+'.png',
+          size: new google.maps.Size(24, 24),
+          scaledSize: new google.maps.Size(12, 12),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(8, 8)
+        }
+        new google.maps.Marker({
+          position: this.mid(a,z)
+          icon: icon
+          map: @map
+        })
+  mid: (p1, p2) ->
+    new google.maps.LatLng(
+      (p1.lat() + p2.lat()) / 2,
+      (p1.lng() + p2.lng()) / 2
+    )

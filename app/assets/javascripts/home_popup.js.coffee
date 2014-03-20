@@ -45,7 +45,7 @@ class popupManager
     $('#images-button').hide()
 
   display: =>
-    this.setImage()
+    return unless this.setImage()
     $('#popup-images').popup('open')
   prev: ->
     @image_index-- if @image_index > 0
@@ -55,9 +55,12 @@ class popupManager
     this.setImage()
 
   setImage: ->
+    return false unless @images?
+    return false unless @images[@image_index]?
     $('#popup-images img').attr('src', @images[@image_index].photo.url)
     $('#popup-images p b').text("#{@image_index + 1} / #{@images.length}  #{@images[@image_index].title}")
     $('#popup-images p span').html(this.nl2br(@images[@image_index].description))
+    true
 
   nl2br: (str) ->
     str.replace(/&/g, '&amp;')
