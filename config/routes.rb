@@ -8,6 +8,9 @@ CorvallisTour::Application.routes.draw do
   namespace :admin do
     resources :locations, :except => :show do
       resources :images
+      member do
+        get 'move/:direction', :action => 'move', :as => 'move'
+      end
     end
   end
 end

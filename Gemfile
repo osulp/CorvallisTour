@@ -63,3 +63,5 @@ gem 'carrierwave'
 gem 'mini_magick'
 
 gem "sprockets-digest-assets-fix", :github => "tobiasr/sprockets-digest-assets-fix"
+
+gem 'acts_as_list'

@@ -7,14 +7,28 @@
     <th class="col-xs-8">Images</th>
   </tr>
   <% @locations.each do |location| %>
-    <tr>
+    <tr class="location-<%=location.id%>">
       <td><%= location.name %></td>
       <td>
-        <%= link_to 'Edit', edit_admin_location_path(location), :class => 'btn btn-default' %>
-        <%= link_to 'Delete', admin_location_path(location), :data => {:confirm => 'Are you sure?'}, :method => :delete, :class => 'btn btn-danger' %>
-        <br />
-        <br />
-        <%= link_to 'Manage images', admin_location_images_path(location), :class => 'btn btn-default' %>
+        <div class="btn-group-vertical">
+          <div class="btn-group btn-group-justified">
+            <%= link_to 'Edit', edit_admin_location_path(location), :class => 'btn btn-default' %>
+            <%= link_to 'Delete', admin_location_path(location), :data => {:confirm => 'Are you sure?'}, :method => :delete, :class => 'btn btn-danger' %>
+          </div>
+          <div class="btn-group btn-group-justified">
+            <%= link_to 'Manage images', admin_location_images_path(location), :class => 'btn btn-default' %>
+          </div>
+          <div class="btn-group btn-group-justified btn-rotate">
+            <% {:top => 'fast-backward', :up => 'backward' }.each do |direction, icon| %>
+              <%= link_to raw("<i class=\"glyphicon glyphicon-#{icon}\"></i>"), move_admin_location_path(location, :direction => direction), :class => "btn btn-default #{direction}" %>
+            <% end %>
+          </div>
+          <div class="btn-group btn-group-justified btn-rotate">
+            <% {:bottom => 'fast-forward', :down => 'forward' }.each do |direction, icon| %>
+              <%= link_to raw("<i class=\"glyphicon glyphicon-#{icon}\"></i>"), move_admin_location_path(location, :direction => direction), :class => "btn btn-default #{direction}" %>
+            <% end %>
+          </div>
+        </div>
       </td>
       <td>
       <%= image_tag "https://maps.googleapis.com/maps/api/staticmap?markers=#{location.latitude},#{location.longitude}&size=160x120&zoom=14&sensor=false" %>
