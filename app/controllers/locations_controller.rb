@@ -3,7 +3,7 @@ class LocationsController < ApplicationController
 
   def index
     visited_locations = session[:visited] || []
-    locations = Location.all
+    locations = Location.all.order(:position)
     locations = locations.map do |location|
       l = location.attributes
       l[:visited] = visited_locations.include? location[:id]

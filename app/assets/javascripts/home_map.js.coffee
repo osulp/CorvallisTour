@@ -113,7 +113,7 @@ class mapManager
 
       travelMode:   google.maps.TravelMode.DRIVING,
       unitSystem:   google.maps.UnitSystem.IMPERIAL,
-      optimizeWaypoints: true
+      optimizeWaypoints: false
     }
     @directionsService.route(request, (result, status) =>
       if (status == google.maps.DirectionsStatus.OK)
