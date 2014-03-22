@@ -42,15 +42,16 @@ class mapManager
 
     this.createMap()
 
-    @directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true})
     @directionsService = new google.maps.DirectionsService()
-    @directionsDisplay.setMap(@map);
 
     $('#my-location-button').click(this.findMyLocation)
 
     this.getLocations()
 
     @markers_on_map = []
+    @directionsDisplay = []
+    @route = []
+    @colors = ['blue', 'orange', 'darkgreen', 'purple']
 
   createMap: ->
     map_options = {center: @user_location, zoom: 14}
@@ -99,29 +100,55 @@ class mapManager
   getLocations: ->
     $.getJSON('/locations', (data) =>
       @locations = data
+      if data.length > 0
+        origin = data[data.length-1]
+        @origin_location = new google.maps.LatLng(origin.latitude, origin.longitude)
       window.locationsManager.saveLocations(data) if window.locationsManager?
       this.getGoogleDirections()
     )
 
   getGoogleDirections: ->
-    request = {
-      origin:       @user_location,
-      destination:  @origin_location, # Use origin to let user drive back to the start place
+    locations = @locations.map((l) -> new google.maps.LatLng(l.latitude, l.longitude))
+    for location, i in locations
+      idx = i
+      request = {
+        origin:       if idx == 0 then @user_location else locations[idx-1],
+        destination:  location,
+        travelMode:   google.maps.TravelMode.DRIVING,
+        unitSystem:   google.maps.UnitSystem.IMPERIAL,
+        optimizeWaypoints: false
+      }
+      @directionsService.route(request, (result, status) =>
+        if (status == google.maps.DirectionsStatus.OK)
+          console.log(result.routes[0].legs[0].end_location)
+          console.log(locations)
 
-      waypoints:    @locations.filter((l) -> l.visited == false)
-                              .map((l) -> { location: new google.maps.LatLng(l.latitude, l.longitude) }),
+          destination = null
+          # This is a hack to read the origin request by visiting obfuscated property name.
+          # Be careful! This may explode!
+          for p, v of result
+            if v.destination?
+              destination = v.destination
+              break
+          idx = locations.indexOf(destination)
 
-      travelMode:   google.maps.TravelMode.DRIVING,
-      unitSystem:   google.maps.UnitSystem.IMPERIAL,
-      optimizeWaypoints: false
-    }
-    @directionsService.route(request, (result, status) =>
-      if (status == google.maps.DirectionsStatus.OK)
-        @directionsDisplay.setDirections(result);
-        @route = result.routes[0]
-        this.drawArrows()
-        this.drawMarkers()
-    )
+          display = new google.maps.DirectionsRenderer({
+            suppressMarkers: true
+            preserveViewport: true
+            polylineOptions: {
+              strokeColor: @colors[idx % @colors.length]
+              strokeOpacity: 0.6
+            }
+          })
+
+          display.setMap(@map)
+          display.setDirections(result)
+          @directionsDisplay[idx] = display
+          @route[idx] = result.routes[0]
+          if @route.length == @locations.length
+            this.drawArrows()
+            this.drawMarkers()
+      )
 
   distance: (position, location)->
     R = 6371 # km
@@ -163,15 +190,9 @@ class mapManager
         map: @map
       }))
 
-    # draw home
-    @markers_on_map.push(new google.maps.Marker({
-      position: @origin_location
-      icon: '/assets/home.png'
-      map: @map
-    }))
   drawArrows: () ->
-    for leg in @route.legs
-      for step in leg.steps
+    for route in @route
+      for step in route.legs[0].steps
         p = if step.lat_lngs.length then Math.floor(step.lat_lngs.length / 2) else 0
         if p >= step.lat_lngs.length then p = 0
         a = if step.lat_lngs[p]? then step.lat_lngs[p] else step.start_point
