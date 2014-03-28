@@ -2,7 +2,7 @@ class Admin::LocationsController < AdminController
   respond_to :html
 
   def index
-    @locations = Location.includes(:images)
+    @locations = Location.includes(:images).order(:position)
     respond_with @locations
   end
 
@@ -32,6 +32,22 @@ class Admin::LocationsController < AdminController
     @location = Location.find(params[:id])
     flash[:success] = 'Location deleted' if @location.destroy
     respond_with @location, :location => admin_locations_path
+  end
+
+  def move
+    @location = Location.find(params[:id])
+    direction = params[:direction]
+    case direction
+    when 'up'
+      @location.move_higher
+    when 'down'
+      @location.move_lower
+    when 'top'
+      @location.move_to_top
+    when 'bottom'
+      @location.move_to_bottom
+    end
+    redirect_to admin_locations_path
   end
 
   private

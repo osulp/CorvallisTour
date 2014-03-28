@@ -35,6 +35,19 @@ describe 'location admin' do
       expect(page).not_to have_content(location.name)
       expect(page).to have_content("Location deleted")
     end
+    it 'should let you move up and down' do
+      test_location = create(:location)
+      visit admin_locations_path
+      expect(Location.find(test_location.id)).to be_last
+      page.find(".location-#{test_location.id} .up").click
+      expect(Location.find(test_location.id)).not_to be_last
+      page.find(".location-#{test_location.id} .down").click
+      expect(Location.find(test_location.id)).to be_last
+      page.find(".location-#{test_location.id} .top").click
+      expect(Location.find(test_location.id)).to be_first
+      page.find(".location-#{test_location.id} .bottom").click
+      expect(Location.find(test_location.id)).to be_last
+    end
   end
   it 'should let you create' do
     visit admin_locations_path
