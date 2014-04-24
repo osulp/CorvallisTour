@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20140225005216) do
     t.datetime "updated_at"
   end
 
-  add_index "images", ["location_id"], name: "index_images_on_location_id", using: :btree
+  add_index "images", ["location_id"], name: "index_images_on_location_id"
 
   create_table "locations", force: true do |t|
     t.string   "name",       null: false

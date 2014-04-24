@@ -42,14 +42,11 @@ class mapManager
 
     this.createMap()
 
-    @directionsService = new google.maps.DirectionsService()
-
     $('#my-location-button').click(this.findMyLocation)
 
     this.getLocations()
 
     @markers_on_map = []
-    @directionsDisplay = []
     @route = []
     @colors = ['blue', 'orange', 'darkgreen', 'purple']
 
@@ -104,51 +101,8 @@ class mapManager
         origin = data[data.length-1]
         @origin_location = new google.maps.LatLng(origin.latitude, origin.longitude)
       window.locationsManager.saveLocations(data) if window.locationsManager?
-      this.getGoogleDirections()
+      this.drawMarkers()
     )
-
-  getGoogleDirections: ->
-    locations = @locations.map((l) -> new google.maps.LatLng(l.latitude, l.longitude))
-    for location, i in locations
-      idx = i
-      request = {
-        origin:       if idx == 0 then @user_location else locations[idx-1],
-        destination:  location,
-        travelMode:   google.maps.TravelMode.DRIVING,
-        unitSystem:   google.maps.UnitSystem.IMPERIAL,
-        optimizeWaypoints: false
-      }
-      @directionsService.route(request, (result, status) =>
-        if (status == google.maps.DirectionsStatus.OK)
-          console.log(result.routes[0].legs[0].end_location)
-          console.log(locations)
-
-          destination = null
-          # This is a hack to read the origin request by visiting obfuscated property name.
-          # Be careful! This may explode!
-          for p, v of result
-            if v.destination?
-              destination = v.destination
-              break
-          idx = locations.indexOf(destination)
-
-          display = new google.maps.DirectionsRenderer({
-            suppressMarkers: true
-            preserveViewport: true
-            polylineOptions: {
-              strokeColor: @colors[idx % @colors.length]
-              strokeOpacity: 0.6
-            }
-          })
-
-          display.setMap(@map)
-          display.setDirections(result)
-          @directionsDisplay[idx] = display
-          @route[idx] = result.routes[0]
-          if @route.length == @locations.length
-            this.drawArrows()
-            this.drawMarkers()
-      )
 
   distance: (position, location)->
     R = 6371 # km
@@ -190,27 +144,6 @@ class mapManager
         map: @map
       }))
 
-  drawArrows: () ->
-    for route in @route
-      for step in route.legs[0].steps
-        p = if step.lat_lngs.length then Math.floor(step.lat_lngs.length / 2) else 0
-        if p >= step.lat_lngs.length then p = 0
-        a = if step.lat_lngs[p]? then step.lat_lngs[p] else step.start_point
-        z = if step.lat_lngs[p+1]? then step.lat_lngs[p+1] else step.end_point
-        dir=((Math.atan2(z.lng()-a.lng(),z.lat()-a.lat())*180)/Math.PI)+360
-        ico=((dir-(dir%3))%120)
-        icon = {
-          url: 'http://maps.google.com/mapfiles/dir_'+ico+'.png',
-          size: new google.maps.Size(24, 24),
-          scaledSize: new google.maps.Size(12, 12),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(8, 8)
-        }
-        new google.maps.Marker({
-          position: this.mid(a,z)
-          icon: icon
-          map: @map
-        })
   mid: (p1, p2) ->
     new google.maps.LatLng(
       (p1.lat() + p2.lat()) / 2,

@@ -56,6 +56,7 @@ group :development, :test do
   gem 'capybara-screenshot'
   gem 'simplecov', :require => false
   gem 'coveralls', require: false
+  gem 'sqlite3'
 end
 
 gem 'simple_form'

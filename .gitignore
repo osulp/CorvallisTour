@@ -39,3 +39,5 @@ pids
 
 # Ignore uploaded files
 public/uploads/*
+db/corvtour_*
+/.vagrant
