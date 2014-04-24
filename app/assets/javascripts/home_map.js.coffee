@@ -136,11 +136,12 @@ class mapManager
         icon: '/assets/site-visited.png'
         map: @map
       })
+      site["marker"] = marker
       @markers_on_map.push(marker)
       manager = this
       google.maps.event.addListener(marker, 'click', ->
         m = this
-        new_site = visited.filter((l) -> l.latitude == m.position.lat() && l.longitude == m.position.lng())[0]
+        new_site = visited.filter((l) -> l.marker == m)[0]
         $(window).trigger 'approaching', [new_site.id, false]
         nearby = manager.nearbyLocations(manager.current_position)
         unless nearby?
