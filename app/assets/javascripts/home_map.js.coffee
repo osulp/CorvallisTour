@@ -68,7 +68,7 @@ class mapManager
     new_location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
     @marker.setPosition(new_location)
     @user_location = new_location
-
+    @current_position = position
     if(!@locations?)
       return
     # See if user is approaching a place
@@ -85,6 +85,7 @@ class mapManager
       $(window).trigger 'leaving'
 
   nearbyLocations: (position) ->
+    position = @current_position unless position?
     nearby = @locations.filter(((l) -> this.distance(position, l) <= l.radius), this)
     if nearby.length == 1 then nearby[0] else null
 
@@ -124,17 +125,31 @@ class mapManager
     # clean old markers
     for marker in @markers_on_map
       marker.setMap(null)
+      google.maps.event.clearInstanceListeners(marker)
     @markers_on_map.length = 0
 
     # draw visited sites
     visited = @locations.filter((l) -> l.visited)
     for site in visited
-      @markers_on_map.push(new google.maps.Marker({
+      marker = new google.maps.Marker({
         position: new google.maps.LatLng(site.latitude, site.longitude)
         icon: '/assets/site-visited.png'
         map: @map
-      }))
-
+      })
+      @markers_on_map.push(marker)
+      manager = this
+      google.maps.event.addListener(marker, 'click', ->
+        m = this
+        new_site = visited.filter((l) -> l.latitude == m.position.lat() && l.longitude == m.position.lng())[0]
+        $(window).trigger 'approaching', [new_site.id, false]
+        nearby = manager.nearbyLocations(manager.current_position)
+        unless nearby?
+          $("#images-button").hide()
+          $(window).on('cached-images', ->
+            $(window).off('cached-images')
+            $("#images-button").hide()
+          )
+      )
     # draw sites to visit
     to_visit = @locations.filter((l) -> l.visited == false)
     for site in to_visit

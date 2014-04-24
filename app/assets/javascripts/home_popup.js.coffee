@@ -4,7 +4,11 @@ jQuery ->
 class popupManager
   constructor: ->
     $('#images-button').hide()
-    $('#images-button').click(this.display)
+    $('#images-button').click(->
+      nearby = window.mapManager.nearbyLocations()
+      if nearby?
+        $(window).trigger("approaching", [nearby.id, false])
+    )
 
     $('#popup-images').on({
       popupbeforeposition: ->
@@ -31,6 +35,7 @@ class popupManager
       $.getJSON("/locations/#{location_id}/images", (data) =>
         @cached_images[location_id] = data
         this.loadImages(location_id, visited)
+        $(window).trigger 'cached-images'
       )
   loadImages: (location_id, visited) ->
     unless @images == @cached_images[location_id]
