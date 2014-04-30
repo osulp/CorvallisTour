@@ -38,7 +38,7 @@ class popupManager
         $(window).trigger 'cached-images'
       )
   loadImages: (location_id, visited) ->
-    unless $("#popup-images").hasClass("ui-popup-active")
+    unless $("#popup-images").parent().hasClass("ui-popup-active")
       unless @images == @cached_images[location_id]
         @images = @cached_images[location_id]
         @image_index = 0
