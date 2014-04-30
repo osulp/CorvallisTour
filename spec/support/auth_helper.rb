@@ -1,7 +1,12 @@
 module AuthHelper
   USERNAME = 'admin'
   PASSWORD = 'secretadmin'
-
+  RSpec.configure do |config|
+    config.before(:each) do
+      APP_CONFIG['authentication'].stub(:[]).with('username').and_return('admin')
+      APP_CONFIG['authentication'].stub(:[]).with('password').and_return(Digest::MD5.hexdigest('secretadmin'))
+    end
+  end
   def http_login
     request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.encode_credentials(USERNAME, PASSWORD)
   end

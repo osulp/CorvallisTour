@@ -2,9 +2,11 @@ require 'spec_helper'
 
 describe 'API calls' do
   let(:image) {create(:image)}
+  let(:setup) {}
   context 'Locations#index' do
     before do
       image
+      setup
       get '/locations/'
       expect(response).to be_success
       @json = JSON.parse(response.body)
@@ -15,6 +17,14 @@ describe 'API calls' do
     end
     it 'should not be marked as visited' do
       expect(@json[0]['visited']).to eq(false)
+    end
+    context "as an admin" do
+      let(:setup) do
+        ApplicationController.any_instance.stub(:admin?).and_return(true)
+      end
+      it "should mark all as visited" do
+        expect(@json[0]['visited']).to eq(true)
+      end
     end
   end
   context 'Locations#images' do

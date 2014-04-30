@@ -6,7 +6,8 @@ class LocationsController < ApplicationController
     locations = Location.all.order(:position)
     locations = locations.map do |location|
       l = location.attributes
-      l[:visited] = visited_locations.include? location[:id]
+      l[:visited] = self.admin?
+      l[:visited] ||= visited_locations.include? location[:id]
       l
     end
 
