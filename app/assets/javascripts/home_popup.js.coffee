@@ -38,11 +38,12 @@ class popupManager
         $(window).trigger 'cached-images'
       )
   loadImages: (location_id, visited) ->
-    unless @images == @cached_images[location_id]
-      @images = @cached_images[location_id]
-      @image_index = 0
-    unless visited
-      this.display()
+    unless $("#popup-images").hasClass("ui-popup-active")
+      unless @images == @cached_images[location_id]
+        @images = @cached_images[location_id]
+        @image_index = 0
+      unless visited 
+        this.display()
 
     $('#images-button').show()
 
